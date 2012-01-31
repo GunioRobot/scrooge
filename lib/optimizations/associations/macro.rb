@@ -1,33 +1,33 @@
 module Scrooge
-  module Optimizations 
+  module Optimizations
     module Associations
       module Macro
-        
+
         class << self
-          
+
           # Inject into ActiveRecord
           #
           def install!
             unless scrooge_installed?
               ActiveRecord::Base.send( :extend,  SingletonMethods )
-              ActiveRecord::Associations::AssociationProxy.send( :include, InstanceMethods )              
+              ActiveRecord::Associations::AssociationProxy.send( :include, InstanceMethods )
             end
           end
-      
+
           protected
-          
+
             def scrooge_installed?
               ActiveRecord::Associations::AssociationProxy.included_modules.include?( InstanceMethods )
             end
-         
+
         end
-        
+
       end
-      
+
       module SingletonMethods
-      
+
         @@preloadable_associations = {}
-      
+
         def self.extended( base )
           eigen = class << base; self; end
           # not used at present
@@ -53,18 +53,18 @@ module Scrooge
             Thread.current[:scrooge_preloading] = false
           end
         end
-        
+
         # Let's not preload polymorphic associations or collections
-        #      
+        #
         def preloadable_associations
-          @@preloadable_associations[self.name] ||= 
+          @@preloadable_associations[self.name] ||=
             reflect_on_all_associations.reject{|a| a.options[:polymorphic] || a.macro == :has_many}.map(&:name)
         end
 
       end
-      
+
       module InstanceMethods
-        
+
         def self.included( base )
           base.alias_method_chain :load_target, :scrooge
         end
@@ -78,7 +78,7 @@ module Scrooge
         end
 
         private
-        
+
           # Register an association with Scrooge
           #
           def scrooge_seen_association!( association )
@@ -86,13 +86,13 @@ module Scrooge
               @owner.class.scrooge_callsite(callsite_signature).association!(association, @owner.id)
             end
           end
-          
+
           def callsite_signature
             @owner.instance_variable_get(:@attributes).callsite_signature
           end
-        
+
       end
-      
+
     end
   end
-end      
+end

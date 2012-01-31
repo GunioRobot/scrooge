@@ -4,7 +4,7 @@ module Scrooge
       class UnscroogedAttributes < Hash
 
         # Hash container for attributes when scrooge is not used
-        #        
+        #
 
         def self.setup(record)
           new.replace(record)
@@ -18,7 +18,7 @@ module Scrooge
         end
 
         alias_method :merge!, :update
-        
+
         # Don't try to reload one of these
         #
         def fully_fetched
@@ -27,9 +27,9 @@ module Scrooge
       end
 
       class ScroogedAttributes < Hash
-        
+
         # Hash container for attributes with scrooge monitoring of attribute access
-        #        
+        #
 
         attr_accessor :fully_fetched, :klass, :updateable_result_set
 
@@ -62,7 +62,7 @@ module Scrooge
           add_to_scrooge_columns(attr_name)
           super
         end
-        
+
         alias_method :store, :[]=
 
         def dup
@@ -88,7 +88,7 @@ module Scrooge
           @fully_fetched = true
           super(hash.to_hash)
         end
-        
+
         alias_method :merge!, :update
 
         def fetch_remaining
@@ -100,22 +100,22 @@ module Scrooge
             @fully_fetched = true
           end
         end
-        
+
         def callsite_signature
           @updateable_result_set.callsite_signature
         end
-        
+
         def scrooge_columns
           @scrooge_columns || @updateable_result_set.scrooge_columns
         end
-        
+
         protected
 
           def fetch_remaining!( columns_to_fetch )
             @updateable_result_set.updaters_attributes = self  # for after_initialize & after_find
             @updateable_result_set.reload_columns!(columns_to_fetch)
           end
-          
+
           def augment_callsite!( attr_name )
             @klass.scrooge_seen_column!(callsite_signature, attr_name)
           end
@@ -138,4 +138,4 @@ module Scrooge
       end
     end
   end
-end    
+end

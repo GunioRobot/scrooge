@@ -6,23 +6,23 @@ ENV["BACKTRACE"] = "1"
 
 module Scrooge
   class Test
-    
+
     MODELS_DIR = "#{File.dirname(__FILE__)}/models".freeze
-    
+
     class << self
-      
+
       def prepare!
         require 'test/unit'
         connect!
         require File.join( File.dirname(__FILE__), 'scrooge_helper' ) unless defined?(ActiveRecord::Base.connection.class::IGNORED_SQL)
-        require_models()      
+        require_models()
       end
-            
+
       def setup!
         setup_constants!
         setup_config!
       end
-        
+
       def connection
         File.join( AR_TEST_SUITE, 'connections', 'native_mysql' )
       end
@@ -48,8 +48,8 @@ module Scrooge
       def require_models
         Dir.entries( MODELS_DIR ).grep(/.rb/).each do |model|
           require_model( model )
-        end  
-      end  
+        end
+      end
 
       def require_model( model )
         require "#{MODELS_DIR}/#{model}"
@@ -57,11 +57,11 @@ module Scrooge
 
       def setup_constants!
         set_constant( 'MYSQL_DB_USER' ){ 'rails' }
-        set_constant( 'AR_TEST_SUITE' ) do 
+        set_constant( 'AR_TEST_SUITE' ) do
           find_active_record_test_suite()
         end
       end
-      
+
       def setup_config!
         unless Object.const_defined?( 'MIGRATIONS_ROOT' )
           require "#{::AR_TEST_SUITE}/config"
@@ -71,7 +71,7 @@ module Scrooge
       def set_constant( constant )
         Object.const_set(constant, yield ) unless Object.const_defined?( constant )
       end
- 
+
       def find_active_record_test_suite
         ts = ($:).grep( /activerecord/ ).last.split('/')
         ts.pop
@@ -81,8 +81,8 @@ module Scrooge
 
       def glob( pattern )
         Dir.glob( pattern )
-      end        
-            
+      end
+
     end
   end
 end

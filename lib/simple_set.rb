@@ -1,7 +1,7 @@
 module Scrooge
 
   class SimpleSet < Hash
- 
+
     class << self
       ##
       # Creates a new set containing the given objects
@@ -13,7 +13,7 @@ module Scrooge
         new(ary)
       end
     end
- 
+
     ##
     # Create a new SimpleSet containing the unique members of _arr_
     #
@@ -25,7 +25,7 @@ module Scrooge
     def initialize(arr = [])
       Array(arr).each {|x| self[x] = true}
     end
- 
+
     ##
     # Add a value to the set, and return it
     #
@@ -38,7 +38,7 @@ module Scrooge
       self[value] = true
       self
     end
- 
+
     ##
     # Merge _arr_ with receiver, producing the union of receiver & _arr_
     #
@@ -54,7 +54,7 @@ module Scrooge
       super(arr.inject({}) {|s,x| s[x] = true; s })
     end
     alias_method :|, :merge
- 
+
     ##
     # Invokes block once for each item in the set. Creates an array
     # containing the values returned by the block.
@@ -69,7 +69,7 @@ module Scrooge
       keys.collect(&block)
     end
     alias_method :map, :collect
- 
+
     ##
     # Get a human readable version of the set.
     #
@@ -82,10 +82,10 @@ module Scrooge
     def inspect
       "#<SimpleSet: {#{keys.map {|x| x.inspect}.join(", ")}}>"
     end
- 
+
     # def to_a
     alias_method :to_a, :keys
- 
+
   end # SimpleSet
 
 end

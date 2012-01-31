@@ -9,7 +9,7 @@ task :default => [:test_with_active_record, :test_scrooge]
 task :test => :default
 
 Rake::TestTask.new( :test_with_active_record ) { |t|
-  t.libs << AR_TEST_SUITE << Scrooge::Test.connection() 
+  t.libs << AR_TEST_SUITE << Scrooge::Test.connection()
   t.test_files = Scrooge::Test.active_record_test_files()
   t.ruby_opts = ["-r #{File.join( File.dirname(__FILE__), 'test', 'setup' )}"]
   t.verbose = true

@@ -2,13 +2,13 @@ module Scrooge
   module Optimizations
     module ResultSets
       class UpdateableResultSet
-        
+
         # Contains a weak referernce to the result set, and can update from DB
         #
-        
+
         attr_accessor :updaters_attributes
         attr_reader :callsite_signature, :scrooge_columns
-        
+
         def initialize(result_set_array, klass, callsite_signature, scrooge_columns)
           if result_set_array
             @result_set_object_id = result_set_array.object_id
@@ -18,7 +18,7 @@ module Scrooge
           @callsite_signature = callsite_signature
           @scrooge_columns = scrooge_columns
         end
-        
+
         # Called by a ScroogedAttributes hash when it is asked for a column
         # that was not fetched from the DB
         #
@@ -45,7 +45,7 @@ module Scrooge
             memo
           end.uniq
         end
-        
+
         # The result set is weak referenced by its object_id
         # So we check that a unique id matches what we have remembered to make sure
         # that we got the right object (object ids are recycled by ruby)
@@ -57,7 +57,7 @@ module Scrooge
         rescue RangeError
           nil
         end
-        
+
         # When called from after_find and after_initialize, the object
         # being accessed (and causing the reload) is not in the result set yet.
         # We make sure that we add its attributes to result_set_attributes so it
@@ -66,7 +66,7 @@ module Scrooge
         def default_attributes
           [@updaters_attributes]
         end
-        
+
         # Ids of the items to be reloaded
         #
         def result_set_ids
@@ -77,7 +77,7 @@ module Scrooge
             memo
           end
         end
-        
+
         # Update the result set with attributes provided, as returned by
         # the sql server
         #
@@ -90,18 +90,18 @@ module Scrooge
             end
           end
         end
-        
+
         # Make an efficient data structure to access items when the
         # primary key is known
         #
         def hash_by_primary_key(rows)
           rows.inject({}) {|memo, row| memo[row[primary_key_name]] = row; memo}
         end
-        
+
         def primary_key_name
           @klass.primary_key
         end
-        
+
       end
     end
   end

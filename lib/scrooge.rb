@@ -25,7 +25,7 @@ module ActiveRecord
 
       # Determine if a given SQL string is a candidate for callsite <=> columns
       # optimization.
-      #     
+      #
       def find_by_sql(sql)
         if scope_with_scrooge?(sql)
           find_by_sql_with_scrooge(sql)
@@ -33,9 +33,9 @@ module ActiveRecord
           find_by_sql_without_scrooge(sql)
         end
       end
-      
+
       # Expose known callsites for this model
-      #      
+      #
       def scrooge_callsites
         @@scrooge_callsites[table_name] || ScroogeMutex.synchronize { @@scrooge_callsites[table_name] = {} }
       end
@@ -49,7 +49,7 @@ module ActiveRecord
       end
 
       # Flush all known callsites. Mostly a test helper.
-      # 
+      #
       def scrooge_flush_callsites!
         ScroogeMutex.synchronize do
           @@scrooge_callsites[table_name] = {}
@@ -64,12 +64,12 @@ module ActiveRecord
           ScroogeMutex.synchronize do
             @@scrooge_callsites.delete(callsite_signature)
           end
-        end 
+        end
 
         # Initialize a callsite
         #
         def callsite( signature )
-          Scrooge::Callsite.new( self, signature )      
+          Scrooge::Callsite.new( self, signature )
         end
 
         # Link the column to its table
@@ -77,7 +77,7 @@ module ActiveRecord
         def attribute_with_table( attr_name )
          "#{quoted_table_name}.#{connection.quote_column_name(attr_name.to_s)}"
         end
-        
+
         # Computes a unique signature from a given call stack and supplementary
         # context information.
         #
